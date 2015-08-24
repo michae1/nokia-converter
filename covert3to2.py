@@ -67,42 +67,43 @@ convertion = {
     'N': lambda s: quopri.decodestring(s)
 }
 
-with io.open(args.file21, "r", encoding="utf-8") as vcard21:
-    current_obj = {}
-    current_field = None
-    current_card = ""
-    current_command = None
-    current_command_data = ""
-    prev_command = None
-    for line in vcard21:
-        if 'END:VCARD' in line:
-            if prev_command in parse_patterns:
-                possible_value = re.findall(parse_patterns[prev_command], current_command_data)
-                new_obj = possible_value[0] if len(possible_value) else None
-                current_obj[prev_command] = convertion[prev_command](new_obj) if prev_command in convertion else new_obj
+if args.file21:
+    with io.open(args.file21, "r", encoding="utf-8") as vcard21:
+        current_obj = {}
+        current_field = None
+        current_card = ""
+        current_command = None
+        current_command_data = ""
+        prev_command = None
+        for line in vcard21:
+            if 'END:VCARD' in line:
+                if prev_command in parse_patterns:
+                    possible_value = re.findall(parse_patterns[prev_command], current_command_data)
+                    new_obj = possible_value[0] if len(possible_value) else None
+                    current_obj[prev_command] = convertion[prev_command](new_obj) if prev_command in convertion else new_obj
 
-            v21_objects.append(current_obj)
-            prev_command = current_command
-            current_obj = {}
-            current_card = ""
-            current_command = None
-            current_command_data = ""
+                v21_objects.append(current_obj)
+                prev_command = current_command
+                current_obj = {}
+                current_card = ""
+                current_command = None
+                current_command_data = ""
 
-        else:
-            if line.startswith(commands):
-                possible_command = re.findall('^(\w+)[:|;]', line)
-                current_command = possible_command[0] if len(possible_command) else None    
+            else:
+                if line.startswith(commands):
+                    possible_command = re.findall('^(\w+)[:|;]', line)
+                    current_command = possible_command[0] if len(possible_command) else None    
 
-                if current_command != prev_command:
-                    if prev_command in parse_patterns:
-                        possible_value = re.findall(parse_patterns[prev_command], current_command_data)
-                        new_obj = possible_value[0] if len(possible_value) else None
-                        current_obj[prev_command] = convertion[prev_command](new_obj) if prev_command in convertion else new_obj
-     
-                    prev_command = current_command  
-                    current_command_data = ""    
+                    if current_command != prev_command:
+                        if prev_command in parse_patterns:
+                            possible_value = re.findall(parse_patterns[prev_command], current_command_data)
+                            new_obj = possible_value[0] if len(possible_value) else None
+                            current_obj[prev_command] = convertion[prev_command](new_obj) if prev_command in convertion else new_obj
+         
+                        prev_command = current_command  
+                        current_command_data = ""    
 
-            current_command_data += line
+                current_command_data += line
 
 # Merge 2.1 object if there is no existent keys with phone number and name:
 for obj in v21_objects:
@@ -111,6 +112,7 @@ for obj in v21_objects:
             'name': obj['N'],
             'tel': obj['TEL'] 
             })
+        phone_cnt += 1
 
 print "Total phones processed: %s"%phone_cnt
 
