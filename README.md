@@ -3,7 +3,7 @@ Convert Gmail (or any vcard3.0) contacts to Nokia vcard2.1 format with ability t
 
 ## Why?
 
-I did not find any other way to put my Gmail contacts into new **"Series 30+ powered Microsoft/Nokia" mobile phone**. There is no way to install any Java app, but you can backup you phone contacts, copy backup.dat file via USB cable and merge with data exported from google using this tool.
+I did not find any other way to put my Gmail contacts into new **"Series 30+ powered Microsoft/Nokia" mobile phone** (like my Nokia 215). There is no way to install any Java app, but you can backup you phone contacts, copy backup.dat file via USB cable and merge with data exported from google using this tool.
 
 ## Installation
 
