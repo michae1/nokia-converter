@@ -28,3 +28,6 @@ pip install -r requirements
 ./covert3to2.py data/gbackup.dat --file21 data/currentbackup.dat --outfile data/backup.dat
 ```
 Copy backup.dat to mobile phone and use restore menu item.
+
+## TODO
+For now only N nd TEL phone is supported but other fields can be easily added
